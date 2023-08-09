@@ -41,6 +41,7 @@ BOT_USERNAME: Final = "@VinayKbot"
 
 # Add Commands
 
+
 async def start_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
     await update.message.reply_text(
         "👋 Hello! Thanks for chatting with me! I am Viany Kayal and project manager of 'Operation Nova'.😎"
@@ -81,22 +82,23 @@ async def custom_command(update: Update, context: ContextTypes.DEFAULT_TYPE):
 # Responses
 
 def handle_response(text: str) -> str:
+
     processed: str = text.lower()
 
-    if "hello" in processed or "hi" in processed:
-        return "👋 Hello! Thanks for chatting with me! I am Viany Kayal and project manager of 'Operation Nova'.😎"
+    if "hello" in processed:
+        return "Hello, How are you?"
 
     if "how are you" in processed:
-        return "I am good! And you?"
+        return "I am good!"
 
     if "thanks" in processed:
         return "You are Welcome!🎇"
 
     if "i am good" in processed:
-        return "Okay, so What do you want for me?"
+        return "Okay"
 
     if "you are welcome" in processed:
-        return
+        return "Ask me anything, I will answer the question."
 
     return generation_response(processed)
 
@@ -105,6 +107,7 @@ sia = SentimentIntensityAnalyzer()
 
 
 def sentiment_analysis(text: str):
+
     tokens = nltk.word_tokenize(text)
     tagged = nltk.pos_tag(tokens)
     entities = nltk.chunk.ne_chunk(tagged)
@@ -124,6 +127,7 @@ def sentiment_analysis(text: str):
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
+
         message_type: str = update.message.chat.type
         message_id = update.message.message_id
         chat_id: str = update.message.chat.id
@@ -138,7 +142,7 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
             if sentiment["compound"] < 0:
                 await context.bot.deleteMessage(message_id=message_id, chat_id=chat_id)
 
-            if "vin" in text and message_type == "group":
+            if "vinay" in text and message_type == "group":
                 print(text)
                 response = handle_response(text)
                 print("Bot:", response)

@@ -17,11 +17,14 @@ model = SentenceTransformer("distilroberta-base-paraphrase-v1")
 
 
 def generation_response(question):
+
     pdf = open("China.pdf", "rb")
     pdf_reader = PdfReader(pdf)
     text = ""
+
     for page in pdf_reader.pages:
         text += page.extract_text()
+
     text_splitter = RecursiveCharacterTextSplitter(
         chunk_size=1000, chunk_overlap=200, length_function=len
     )
@@ -43,6 +46,7 @@ def generation_response(question):
     llm = OpenAI(tiktoken_model_name="gpt-3.5-turbo")
     chain = load_qa_chain(llm=llm, chain_type="stuff")
     query = question
+
     docs = VectorStore.similarity_search(query=query, k=3)
     with get_openai_callback() as cb:
         response = chain.run(input_documents=docs, question=query)
